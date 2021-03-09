@@ -27,13 +27,13 @@ func init() {
 	}
 }
 
-//Exit releases SPI/GPIO control
+// Exit releases SPI/GPIO control
 func Exit() {
 	rpio.SpiEnd(rpio.Spi0)
 	rpio.Close()
 }
 
-//Initialize Wakes up and initializes an EPD for use
+// Initialize Wakes up and initializes an EPD for use
 func Initialize() {
 	resetPin.Mode(rpio.Output)
 	dcPin.Mode(rpio.Output)
@@ -72,16 +72,16 @@ func Initialize() {
 	SendData(34)
 }
 
-//DisplayImage Loads and displays an image on an EPD
+// DisplayImage Loads and displays an image on an EPD
 func DisplayImage(dimg image.Image) {
 	SendCommand(19)
 	SendImageData(dimg, width, height)
 }
 
-//DisplayPartialImage displays "dimg" at point the given point
-//TODO func DisplayPartialImage(dimg image.Image, point image.Point) {}
+// DisplayPartialImage displays "dimg" at point the given point
+// TODO func DisplayPartialImage(dimg image.Image, point image.Point) {}
 
-//Sleep turns off your EPD to prevent display damage
+// Sleep turns off your EPD to prevent display damage
 func Sleep() {
 	SendCommand(2) //power off
 	WaitUntilIdle()
@@ -89,9 +89,9 @@ func Sleep() {
 	SendData(165)
 }
 
-//SendImageData transmits the bits of an image
+// SendImageData transmits the bits of an image
 //
-//If trying to render an image to the screen, use DisplayImage or DisplayPartialImage instead
+// If trying to render an image to the screen, use DisplayImage or DisplayPartialImage instead
 func SendImageData(dimg image.Image, width int, height int) {
 	var bitArray []int //This was sadly the best way I could think of to construct a byte with custom bits
 
@@ -117,7 +117,7 @@ func SendImageData(dimg image.Image, width int, height int) {
 	TurnOnDisplay()
 }
 
-//WaitUntilIdle Loops until the initialized EPD is availible
+// WaitUntilIdle Loops until the initialized EPD is availible
 func WaitUntilIdle() {
 	for {
 		SendCommand(113)
@@ -132,7 +132,7 @@ func WaitUntilIdle() {
 	}
 }
 
-//TurnOnDisplay displays the image stored on our EPD
+// TurnOnDisplay displays the image stored on our EPD
 func TurnOnDisplay() {
 	SendCommand(18)                    //DISPLAY REFRESH
 	time.Sleep(100 * time.Millisecond) //!!!The delay here is necessary, 200uS at least!!!
@@ -140,7 +140,7 @@ func TurnOnDisplay() {
 
 }
 
-//Reset Resets EPD (calling this will wake up the EPD)
+// Reset Resets EPD (calling this will wake up the EPD)
 func Reset() {
 	resetPin.Write(rpio.High)
 	time.Sleep(200 * time.Millisecond)
@@ -150,7 +150,7 @@ func Reset() {
 	time.Sleep(200 * time.Millisecond)
 }
 
-//SendCommand Sends an arbitrary command to the display
+// SendCommand Sends an arbitrary command to the display
 func SendCommand(b byte) {
 	dcPin.Write(rpio.Low)
 	csPin.Write(rpio.Low)
@@ -158,7 +158,7 @@ func SendCommand(b byte) {
 	csPin.Write(rpio.High)
 }
 
-//SendData Sends an arbitrary byte of data to the display
+// SendData Sends an arbitrary byte of data to the display
 func SendData(b byte) {
 	dcPin.Write(rpio.High)
 	csPin.Write(rpio.Low)
